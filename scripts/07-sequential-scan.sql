@@ -1,0 +1,5 @@
+﻿DROP TABLE IF EXISTS tabulka1 CASCADE;
+
+CREATE TABLE tabulka1 AS SELECT i FROM generate_series(1,100000) s(i);
+ANALYZE tabulka1;
+EXPLAIN ANALYZE SELECT i FROM tabulka1 WHERE i = 1000;

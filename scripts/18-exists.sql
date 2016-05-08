@@ -1,0 +1,19 @@
+﻿DROP TABLE IF EXISTS tabulka1 CASCADE;
+DROP TABLE IF EXISTS tabulka2 CASCADE;
+
+CREATE TABLE tabulka1 (id INT PRIMARY KEY);
+CREATE TABLE tabulka2 (id INT PRIMARY KEY);
+
+INSERT INTO tabulka1 SELECT i FROM generate_series(1,10000) s(i);
+INSERT INTO tabulka2 SELECT i FROM generate_series(1,10000) s(i);
+
+ANALYZE tabulka1;
+ANALYZE tabulka2;
+
+EXPLAIN SELECT * FROM tabulka1 WHERE EXISTS (SELECT 1 FROM tabulka2 WHERE id = tabulka1.id);
+
+EXPLAIN SELECT * FROM tabulka1 WHERE id IN (SELECT id FROM tabulka2);
+
+EXPLAIN SELECT * FROM tabulka1 WHERE NOT EXISTS (SELECT id FROM tabulka2 WHERE id = tabulka1.id);
+
+EXPLAIN SELECT * FROM tabulka1 WHERE id NOT IN (SELECT id FROM tabulka2);

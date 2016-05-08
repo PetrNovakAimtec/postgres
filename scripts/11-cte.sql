@@ -1,0 +1,9 @@
+﻿DROP TABLE IF EXISTS tabulka1 CASCADE;
+CREATE TABLE tabulka1 AS SELECT i FROM generate_series(1,1000000) s(i);
+ANALYZE tabulka1;
+
+EXPLAIN ANALYZE
+WITH tabulka2 AS (SELECT * FROM tabulka1 WHERE i >= 100)
+SELECT * FROM tabulka2 WHERE i <= 110
+  UNION ALL
+SELECT * FROM tabulka2 WHERE i <= 120;
